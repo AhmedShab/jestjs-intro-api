@@ -6,6 +6,10 @@ import { Coffee, CoffeeSchema } from './entities/coffee.entity';
 import { Event, EventSchema } from '../events/entities/event.entity';
 import { COFFEE_BRANDS } from './coffees.constants';
 
+class ConfigService {}
+class DevelopmentConfigService {}
+class ProductionConfigService {}
+
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -22,6 +26,13 @@ import { COFFEE_BRANDS } from './coffees.constants';
   controllers: [CoffeesController],
   providers: [
     CoffeesService,
+    {
+      provide: ConfigService,
+      useClass:
+        process.env.NODE_ENV === 'development'
+          ? DevelopmentConfigService
+          : ProductionConfigService,
+    },
     {
       provide: COFFEE_BRANDS,
       useValue: ['buddy brew', 'nescafe'], // array of coffee brands,
