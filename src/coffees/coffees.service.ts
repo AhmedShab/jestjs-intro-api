@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { Connection, Model } from 'mongoose';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
@@ -6,6 +6,7 @@ import { PaginationQueryDto } from './dto/pagination-query.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { Coffee } from './entities/coffee.entity';
 import { Event } from '../events/entities/event.entity';
+import { COFFEE_BRANDS } from './coffees.constants';
 
 @Injectable()
 export class CoffeesService {
@@ -13,6 +14,7 @@ export class CoffeesService {
     @InjectModel(Coffee.name) private readonly coffeeModel: Model<Coffee>,
     @InjectModel(Event.name) private readonly eventModel: Model<Event>,
     @InjectConnection() private readonly connection: Connection,
+    @Inject(COFFEE_BRANDS) coffeeBrands: string[],
   ) {}
 
   async findAll(paginationQuery: PaginationQueryDto) {

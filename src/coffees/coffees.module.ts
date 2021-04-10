@@ -4,6 +4,7 @@ import { CoffeesController } from './coffees.controller';
 import { CoffeesService } from './coffees.service';
 import { Coffee, CoffeeSchema } from './entities/coffee.entity';
 import { Event, EventSchema } from '../events/entities/event.entity';
+import { COFFEE_BRANDS } from './coffees.constants';
 
 @Module({
   imports: [
@@ -19,7 +20,13 @@ import { Event, EventSchema } from '../events/entities/event.entity';
     ]),
   ],
   controllers: [CoffeesController],
-  providers: [CoffeesService],
+  providers: [
+    CoffeesService,
+    {
+      provide: COFFEE_BRANDS,
+      useValue: ['buddy brew', 'nescafe'], // array of coffee brands,
+    },
+  ],
   exports: [CoffeesService],
 })
 export class CoffeesModule {}
