@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Injectable, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CoffeesController } from './coffees.controller';
 import { CoffeesService } from './coffees.service';
@@ -9,6 +9,13 @@ import { COFFEE_BRANDS } from './coffees.constants';
 class ConfigService {}
 class DevelopmentConfigService {}
 class ProductionConfigService {}
+
+@Injectable()
+export class CoffeeBrandsFactory {
+  create() {
+    return ['buddy brew', 'nescafe'];
+  }
+}
 
 @Module({
   imports: [
@@ -26,6 +33,7 @@ class ProductionConfigService {}
   controllers: [CoffeesController],
   providers: [
     CoffeesService,
+    CoffeeBrandsFactory,
     {
       provide: ConfigService,
       useClass:
@@ -35,7 +43,10 @@ class ProductionConfigService {}
     },
     {
       provide: COFFEE_BRANDS,
-      useValue: ['buddy brew', 'nescafe'], // array of coffee brands,
+      useFactory: (brandsFactory: CoffeeBrandsFactory) => {
+        return brandsFactory.create();
+      },
+      inject: [CoffeeBrandsFactory],
     },
   ],
   exports: [CoffeesService],
