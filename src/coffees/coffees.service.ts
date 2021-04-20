@@ -7,10 +7,12 @@ import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { Coffee } from './entities/coffee.entity';
 import { Event } from '../events/entities/event.entity';
 import { COFFEE_BRANDS } from './coffees.constants';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CoffeesService {
   constructor(
+    private configService: ConfigService,
     @InjectModel(Coffee.name) private readonly coffeeModel: Model<Coffee>,
     @InjectModel(Event.name) private readonly eventModel: Model<Event>,
     @InjectConnection() private readonly connection: Connection,
