@@ -1,8 +1,15 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Coffee } from './entities/coffee.entity';
 
 @Injectable()
 export class CoffeesService {
+  constructor(private configService: ConfigService) {}
   private coffees: Coffee[] = [
     {
       id: 1,
